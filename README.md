@@ -1,1 +1,1 @@
-# predix-edge-sample-scaler-go
+# predix-edge-sample-scaler-go - coming soon
