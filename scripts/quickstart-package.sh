@@ -50,7 +50,7 @@ PREDIX_SCRIPTS="predix-scripts"
 GITHUB_RAW="https://raw.githubusercontent.com"
 IZON_SH="https://raw.githubusercontent.com/PredixDev/izon/1.5.0/izon2.sh"
 
-GITHUB_ORG="adoption"
+GITHUB_ORG="PredixDev"
 REPO_NAME="predix-edge-sample-scaler-go"
 APP_DIR="edge-sample-scaler-go"
 APP_NAME="Predix Edge Sample Scaler Go - package"
