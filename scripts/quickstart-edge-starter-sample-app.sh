@@ -143,10 +143,6 @@ if ! [ -d "$logDir" ]; then
 fi
 
 ########### custom logic starts here ###########
-if [[ ! $(docker swarm init) ]]; then
-  echo "Already in swarm node. Ignore the above error message"
-fi
-
 if [[ "$BUILD_APP" == "true" ]]; then
   cd $PREDIX_SCRIPTS/$REPO_NAME
   dockerVersion=$(grep version Dockerfile | awk -F"=" '{print $2}' | tr -d "\"")
@@ -154,11 +150,6 @@ if [[ "$BUILD_APP" == "true" ]]; then
   docker build --build-arg HTTP_PROXY --build-arg HTTPS_PROXY --build-arg http_proxy --build-arg https_proxy -t predixedge/predix-edge-sample-scaler-go:latest .
   cd ../..
 fi
-
-docker service ls
-echo ""
-echo ""
-docker network ls
 ########### custom logic ends here ###########
 
 echo "quickstart_args=$QUICKSTART_ARGS"
