@@ -72,7 +72,7 @@ var defaultMessageHandler MQTT.MessageHandler = func(client MQTT.Client, msg MQT
 			doubleData = doubleData * 1000
 			//put datapoint back into data
 			m.Body[i].Datapoints[0][1] = doubleData
-			//m.Body[0].Name = tagName + ".scaled_by_1000" //Rename tag
+			m.Body[i].Name = m.Body[i].Name + ".scaled_x_1000" //Rename tag
 			fmt.Println("Changed data for "+m.Body[i].Name)
 		}
 	}

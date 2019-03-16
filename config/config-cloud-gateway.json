@@ -4,7 +4,7 @@
             "type": "timeseries",
             "config": {
                 "log_name": "time_series_sender",
-                "log_level": "warn",
+                "log_level": "debug",
                 "mqtt": {
                     "transport_addr": "mqtt-tcp://predix-edge-broker",
                     "qos": 0,
@@ -22,7 +22,7 @@
                     "transport_addr": "wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages",
                     "predix_zone_id": "your-predix-zone-id"
                     "token_file": "/edge-agent/access_token",
-                    "proxy_url": "<<Put your proxy url>>"
+                    "proxy_url": "$https_proxy"
                 }
             }
         }

@@ -157,7 +157,6 @@ Feb 28 03:23:52 predixedge b35f5fc9ed5b[319]: {"messageId":"flex-pipe","body":[{
 ## Software You will Need
 
 In order to develop and run this sample locally you will need:
-* [**Go**](https://golang.org/)
 * [**Docker**](https://www.docker.com/)
 * The *UAA URL*, *ClientID* and *Secret* for the Predix Cloud Time Series service to which you wish to ingest the app's output.
 
@@ -408,6 +407,13 @@ docker logs 0000000000
 
 
 #### Option 2: Run all the containers on your machine, except for the Go code
+
+This is very similar to Option 1, only instead of running the application in a Docker container, you run it locally on your machine.
+
+## Software You will Need
+
+In order to develop and run this sample locally you will need:
+* [**Go**](https://golang.org/)
 
 ##### Step 1: Run the other containers of the Application
 

@@ -69,12 +69,6 @@ SCRIPT_LOC="$GITHUB_RAW/$GITHUB_ORG/$REPO_NAME/$BRANCH/scripts/$SCRIPT_NAME"
 VERSION_JSON_URL="$GITHUB_RAW/$GITHUB_ORG/$REPO_NAME/$BRANCH/version.json"
 
 
-#if [[ "$SKIP_PREDIX_SERVICES" == "false" ]]; then
-#  QUICKSTART_ARGS="$QUICKSTART_ARGS --run-edge-app -p $SCRIPT"
-#else
-#  QUICKSTART_ARGS="$QUICKSTART_ARGS -uaa -ts -psts --run-edge-app -p $SCRIPT"
-#fi
-
 function check_internet() {
   set +e
   echo ""

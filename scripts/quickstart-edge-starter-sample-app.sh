@@ -50,19 +50,19 @@ function local_read_args() {
 BRANCH="master"
 PRINT_USAGE=0
 SKIP_SETUP=false
-GITHUB_RAW="https://raw.githubusercontent.com"
 VERSION_JSON="version.json"
 PREDIX_SCRIPTS_ORG="PredixDev"
 PREDIX_SCRIPTS="predix-scripts"
+GITHUB_RAW="https://raw.githubusercontent.com"
+IZON_SH="https://raw.githubusercontent.com/PredixDev/izon/1.5.0/izon2.sh"
 
 GITHUB_ORG="PredixDev"
 REPO_NAME="predix-edge-sample-scaler-go"
-IZON_SH="https://raw.githubusercontent.com/PredixDev/izon/1.5.0/izon2.sh"
+DOCKER_STACK_NAME="predix-edge-sample-scaler-go"
 SCRIPT="-script edge-starter-deploy.sh -script-readargs edge-starter-deploy-readargs.sh"
-SCRIPT_NAME="quickstart-edgesample-scaler-go-local.sh"
+SCRIPT_NAME="quickstart-edge-starter-sample-app.sh"
 APP_DIR="edge-sample-scaler-go"
 APP_NAME="Predix Edge Sample Scaler App - Go"
-
 TOOLS="Cloud Foundry CLI, Docker, Git, jq, yq, Go, Predix CLI"
 TOOLS_SWITCHES="--cf --docker --git --jq --yq --go --predixcli"
 
@@ -75,10 +75,11 @@ local_read_args $@
 SCRIPT_LOC="$GITHUB_RAW/$GITHUB_ORG/$REPO_NAME/$BRANCH/scripts/$SCRIPT_NAME"
 VERSION_JSON_URL="$GITHUB_RAW/$GITHUB_ORG/$REPO_NAME/$BRANCH/version.json"
 
-if [[ "$SKIP_PREDIX_SERVICES" == "false" ]]; then
-  QUICKSTART_ARGS="$QUICKSTART_ARGS -uaa -ts -psts -app-name $REPO_NAME --run-edge-app -p $SCRIPT"
+if [[ "$SKIP_PREDIX_SERVICES" == "true" ]]; then
+  QUICKSTART_ARGS="$QUICKSTART_ARGS $SCRIPT -uaa -ts -psts --run-edge-app -repo-name $REPO_NAME -app-name $DOCKER_STACK_NAME"
 else
-  QUICKSTART_ARGS="$QUICKSTART_ARGS -app-name $REPO_NAME --run-edge-app -p $SCRIPT"
+  PS_MODEL="sample-data/predix-asset/Compressor-CMMS-Compressor-2018-Scaled.json"
+  QUICKSTART_ARGS="$QUICKSTART_ARGS $SCRIPT -uaa -ts -psts -psmodel $PS_MODEL --run-edge-app -repo-name $REPO_NAME -app-name $DOCKER_STACK_NAME"
 fi
 
 function check_internet() {
@@ -134,31 +135,35 @@ fi
 
 getPredixScripts
 #clone the repo itself if running from oneclick script
-rm -rf predix-scripts/$REPO_NAME
 getCurrentRepo
 
-docker images
+if ! [ -d "$logDir" ]; then
+  mkdir "$logDir"
+  chmod 744 "$logDir"
+fi
 
+########### custom logic starts here ###########
 if [[ "$BUILD_APP" == "true" ]]; then
   cd $PREDIX_SCRIPTS/$REPO_NAME
+  dockerVersion=$(grep version Dockerfile | awk -F"=" '{print $2}' | tr -d "\"")
+  echo "$dockerVersion"
   docker build --build-arg HTTP_PROXY --build-arg HTTPS_PROXY --build-arg http_proxy --build-arg https_proxy -t predixedge/predix-edge-sample-scaler-go:latest .
-  version=$(jq -r .version version.json)
-  echo "version : $version"
-  docker tag predixedge/predix-edge-sample-scaler-go:latest predixedge/predix-edge-sample-scaler-go:${version}
   cd ../..
 fi
+
+docker service ls
+echo ""
+echo ""
+docker network ls
+########### custom logic ends here ###########
+
 echo "quickstart_args=$QUICKSTART_ARGS"
 source $PREDIX_SCRIPTS/bash/quickstart.sh $QUICKSTART_ARGS
-
-docker stack ls
-docker stack services $REPO_NAME
-docker ps
-
 
 cat $SUMMARY_TEXTFILE
 if [[ $SKIP_PREDIX_SERVICES == false ]]; then
   __append_new_line_log "To see the data in the cloud, using a browser, open the Front-end App URL shown above.  With login=app_user_1, password=App_User_111" "$quickstartLogDir"
 fi
 __append_new_line_log "" "$logDir"
-__append_new_line_log "Successfully completed Edge Sample Scaler Go installation!" "$quickstartLogDir"
+__append_new_line_log "Successfully completed $APP_NAME installation!" "$quickstartLogDir"
 __append_new_line_log "" "$logDir"

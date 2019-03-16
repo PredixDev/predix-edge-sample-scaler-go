@@ -2,7 +2,7 @@ version: "3.0"
 #This file combines all the edge services and our services so that it can be deployed as a unit
 services:
   opcua-simulator:
-    image: "predixedge/predix-edge-opcua-simulator:1.0.9"
+    image: "predixedge/predix-edge-opcua-simulator:1.0.10"
     hostname: "opcua-simulator"
     volumes:
       - ./config:/config
@@ -10,7 +10,6 @@ services:
       - predix-edge-broker_net
     ports:
       - 4334:4334
-    #entrypoint: ["sh", "-c", "sleep 500000"]
   opcua:
     image: "dtr.predix.io/predix-edge/protocol-adapter-opcua:amd64-1.1.0"
     environment:
@@ -24,6 +23,11 @@ services:
     image: "dtr.predix.io/predix-edge/cloud-gateway:amd64-1.1.0"
     environment:
       config: "/config/config-cloud-gateway.json"
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTP_PROXY}
+      no_proxy: ${no_proxy}
     volumes:
       - ./config:/config
       - ./data:/data
@@ -31,7 +35,7 @@ services:
     networks:
       - predix-edge-broker_net
   edge-app:
-    image: "predixedge/predix-edge-sample-scaler-go:1.0.3"
+    image: "predixedge/predix-edge-sample-scaler-go:1.0.4"
     environment:
       CLIENT_ID: "go-simple"
       BROKER: "predix-edge-broker:1883"
@@ -42,12 +46,6 @@ services:
       - ./config:/config
       - ./data:/data
       - ./data:/edge-agent
-    environment:
-      CLIENT_ID: "go-simple"
-      BROKER: "predix-edge-broker:1883"
-      PUB_TOPIC: "timeseries_data"
-      SUB_TOPIC: "app_data"
-      TAG_NAME: "My.App.DOUBLE1"
     networks:
       - predix-edge-broker_net
     #entrypoint: ["sh", "-c", "sleep 500000"]
