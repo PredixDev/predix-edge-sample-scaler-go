@@ -143,6 +143,10 @@ if ! [ -d "$logDir" ]; then
 fi
 
 ########### custom logic starts here ###########
+if [[ ! $(docker swarm init) ]]; then
+  echo "Already in swarm node. Ignore the above error message"
+fi
+
 if [[ "$BUILD_APP" == "true" ]]; then
   cd $PREDIX_SCRIPTS/$REPO_NAME
   dockerVersion=$(grep version Dockerfile | awk -F"=" '{print $2}' | tr -d "\"")
