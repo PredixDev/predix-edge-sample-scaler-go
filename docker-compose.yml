@@ -23,7 +23,7 @@ services:
     networks:
       - predix-edge-broker_net
   edge-app:
-    image: "predixedge/predix-edge-sample-scaler-go:1.0.5"
+    image: "predixedge/predix-edge-sample-scaler-go:1.0.6"
     environment:
       CLIENT_ID: "go-simple"
       BROKER: "predix-edge-broker:1883"
